@@ -20,25 +20,29 @@ if (!serverSocket || !clientSocket) {
 var server = net.createServer(function(c) {
 	console.log('Server connected');
 
-	c.on('end', function() { console.log('Server disconnected'); });
+	c.on('end', function() {
+		console.log('Server disconnected');
+	});
 
 	// Pipe input on the socket to console STDOUT
 	c.on('data', function(data) {
-		var dataString = data.toString();
-		console.log(dataString);
+		var input = data.toString();
 		var client = net.connect({ path: clientSocket }, function() {
 			console.log('Client socket connected (%s)', clientSocket);
-			client.write(dataString);
+			client.write(input);
 		});
+
+		console.log(input);
 
 		client.on('data', function(data) {
-			var dataString = data.toString();
-			console.log(dataString);
-			c.write(dataString);
-			//client.end();
+			var output = data.toString();
+			console.log(output);
+			c.write(output);
 		});
 
-		client.on('end', function() { console.log('Client disconnected'); });
+		client.on('end', function() {
+			console.log('Client disconnected');
+		});
 	});
 
 });
