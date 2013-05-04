@@ -3,9 +3,19 @@
 // Libraries
 var net = require('net');
 var fs = require('fs');
+var path = require('path');
 
 var serverSocket = process.argv[2];
 var clientSocket = process.argv[3];
+
+if (!serverSocket || !clientSocket) {
+	var thisScript = path.basename(process.argv[1]);
+
+	console.log('Usage:\t\t%s LISTEN_SOCKET CONNECT_SOCKET', thisScript);
+	console.log('Example:\t%s /tmp/sniffer.sock /tmp/thin.0.sock', thisScript);
+
+	process.exit(0);
+}
 
 var server = net.createServer(function(c) {
 	console.log('Server connected');
