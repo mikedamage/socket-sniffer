@@ -13,7 +13,24 @@ var server = net.createServer(function(c) {
 	c.on('end', function() { console.log('Server disconnected'); });
 
 	// Pipe input on the socket to console STDOUT
-	c.pipe(process.stdout);
+	c.on('data', function(data) {
+		var dataString = data.toString();
+		console.log(dataString);
+		var client = net.connect({ path: clientSocket }, function() {
+			console.log('Client socket connected (%s)', clientSocket);
+			client.write(dataString);
+		});
+
+		client.on('data', function(data) {
+			var dataString = data.toString();
+			console.log(dataString);
+			c.write(dataString);
+			//client.end();
+		});
+
+		client.on('end', function() { console.log('Client disconnected'); });
+	});
+
 });
 
 // Delete socket if it already exists
