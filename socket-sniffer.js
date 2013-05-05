@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 // Libraries
-var net = require('net');
-var fs = require('fs');
+var net  = require('net');
+var fs   = require('fs');
 var path = require('path');
 
 var serverSocket = process.argv[2];
