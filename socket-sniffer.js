@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
 ;(function() {
+	"use strict";
+
 	// Libraries
-	var net  = require('net');
-	var fs   = require('fs');
-	var path = require('path');
+	var net    = require('net');
+	var fs     = require('fs');
+	var path   = require('path');
+	var colors = require('colors');
 
 	var serverSocket = process.argv[2];
 	var clientSocket = process.argv[3];
@@ -19,17 +22,17 @@
 	}
 
 	var server = net.createServer(function(c) {
-		console.log('Server connected');
+		console.log('Server connected'.green);
 
 		c.on('end', function() {
-			console.log('Server disconnected');
+			console.log('Server disconnected'.yellow);
 		});
 
 		// Pipe input on the socket to console STDOUT
 		c.on('data', function(data) {
 			var input = data.toString();
 			var client = net.connect({ path: clientSocket }, function() {
-				console.log('Client socket connected (%s)', clientSocket);
+				console.log('Client socket connected (%s)'.green, clientSocket);
 				client.write(input);
 			});
 
@@ -42,7 +45,7 @@
 			});
 
 			client.on('end', function() {
-				console.log('Client disconnected');
+				console.log('Client disconnected'.yellow);
 			});
 		});
 
@@ -50,21 +53,21 @@
 
 	// Delete socket if it already exists
 	if (fs.existsSync(serverSocket)) {
-		console.log('Unlinking %s', serverSocket);
+		console.log('Unlinking %s'.yellow, serverSocket);
 		fs.unlinkSync(serverSocket);
 	}
 
 	server.listen(serverSocket, function() {
-		console.log('Server bound to %s', serverSocket);
+		console.log('Server bound to %s'.blue, serverSocket);
 	});
 
 	// Handle server teardown on CTRL-C
 	process.on('SIGINT', function() {
 		// Close and unref the server
-		console.log('Closing Server');
+		console.log('Closing Server'.yellow);
 		server.close(function() {
 			server.unref();
-			console.log('Exiting...');
+			console.log('Exiting...'.red);
 			process.exit(0);
 		});
 	});
