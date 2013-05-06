@@ -3,5 +3,8 @@
 	"version": "0.1.0",
 	"dependencies": {
 		"colors": "~0.6.0"
+	},
+	"bin": {
+		"socket-sniffer": "./bin/socket-sniffer"
 	}
 }
