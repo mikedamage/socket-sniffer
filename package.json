@@ -1,10 +1,14 @@
 {
 	"name": "socket-sniffer",
 	"version": "0.1.0",
+	"license": "MIT",
+	"author": "Mike Green <mike.is.green@gmail.com> (http://mikedamage.github.com)"
 	"dependencies": {
 		"colors": "~0.6.0"
 	},
 	"bin": {
 		"socket-sniffer": "./bin/socket-sniffer"
-	}
+	},
+	"os": ["darwin", "linux"],
+	"private": true
 }
