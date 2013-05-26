@@ -12,6 +12,7 @@
 	var serverSocket = process.argv[2];
 	var clientSocket = process.argv[3];
 
+	// Display usage info if user doesn't provide input and output socket filenames
 	if (!serverSocket || !clientSocket) {
 		var thisScript = path.basename(process.argv[1]);
 
@@ -30,14 +31,19 @@
 
 		// Pipe input on the socket to console STDOUT
 		c.on('data', function(data) {
+			// Convert input chunk to a string
 			var input = data.toString();
+
+			// Connect to output socket and send server socket input to it
 			var client = net.connect({ path: clientSocket }, function() {
 				console.log('Client socket connected (%s)'.green, clientSocket);
 				client.write(input);
 			});
 
+			// Echo server input to STDOUT
 			console.log(input);
 
+			// Send client socket's response back to server socket and STDOUT at the same time
 			client.on('data', function(data) {
 				var output = data.toString();
 				console.log(output);
@@ -72,3 +78,5 @@
 		});
 	});
 })();
+
+// vim: set ft=javascript :
